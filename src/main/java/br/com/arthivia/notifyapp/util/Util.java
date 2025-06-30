@@ -20,37 +20,47 @@ public class Util {
         };
     }
 
-    public static List<Integer> convertDayList(List<String> daylist) {
-        List<Integer> outlist = new ArrayList<>();
-        for (String day : daylist) {
-            var dayWeek = switch (day) {
-                case "SEGUNDA" -> 1;
-                case "TERÇA" -> 2;
-                case "QUARTA" -> 3;
-                case "QUINTA" -> 4;
-                case "SEXTA" -> 5;
-                case "SABADO" -> 6;
-                case "DOMINGO" -> 7;
-                default -> throw new IllegalStateException("Unexpected value: " + day);
-            };
-            outlist.add(dayWeek);
-        }
-        return outlist;
+    private static Integer convertIntDay(String day) {
+        return switch (day) {
+            case "SEGUNDA" -> 1;
+            case "TERÇA" -> 2;
+            case "QUARTA" -> 3;
+            case "QUINTA" -> 4;
+            case "SEXTA" -> 5;
+            case "SABADO" -> 6;
+            case "DOMINGO" -> 7;
+            default -> throw new IllegalStateException("Unexpected value: " + day);
+        };
     }
 
-    public static NotificationTable convertNotificationTable(NotificationDao notificationDao){
+    public static NotificationTable convertNotificationTable(NotificationDao notificationDao) {
         List<String> dayStringList = new ArrayList<>();
-        for(Integer dayWeek: notificationDao.getDayWeek()){
+        for (Integer dayWeek : notificationDao.getDayWeek()) {
             dayStringList.add(convertDayToString(dayWeek));
         }
         return new NotificationTable(
-            notificationDao.getId(),
-            notificationDao.getTitle(),
-            notificationDao.getMessage(),
-            dayStringList,
-            notificationDao.getHour(),
-            notificationDao.getEnable(),
-            notificationDao.getNotified()
+                notificationDao.getId(),
+                notificationDao.getTitle(),
+                notificationDao.getMessage(),
+                dayStringList,
+                notificationDao.getHour(),
+                notificationDao.getEnable(),
+                notificationDao.getNotified()
         );
+    }
+
+    public static NotificationDao convertNotificationDao(NotificationTable notificationTable) {
+        List<Integer> dayIntegerList = new ArrayList<>();
+        for (String dayWeek : notificationTable.getDayWeek()) {
+            dayIntegerList.add(convertIntDay(dayWeek));
+        }
+
+        return new NotificationDao(notificationTable.getId(),
+                notificationTable.getTitle(),
+                notificationTable.getMessage(),
+                dayIntegerList,
+                notificationTable.getHour(),
+                notificationTable.getEnable(),
+                notificationTable.getNotified());
     }
 }

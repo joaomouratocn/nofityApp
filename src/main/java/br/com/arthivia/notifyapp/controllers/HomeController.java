@@ -7,9 +7,7 @@ import br.com.arthivia.notifyapp.util.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +15,7 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class HomeController {
     @FXML
@@ -31,6 +30,7 @@ public class HomeController {
     private TableColumn<NotificationDao, String> colTitle;
     @FXML
     private TableColumn<NotificationDao, String> colMessage;
+    @FXML
 
     DAO dao = new DAO();
 
@@ -61,19 +61,18 @@ public class HomeController {
             }
         });
 
-//        dao.insertNotification(
-//            new NotificationDao(
-//                    0,
-//                    "Sistema",
-//                    "Reunião Sistema",
-//                    List.of(7, 3),
-//                    "13:00",
-//                    1,
-//                    0)
-//        );
+        dao.insertNotification(
+                new NotificationDao(
+                        0,
+                        "Sistema",
+                        "Reunião Sistema",
+                        List.of(7, 3),
+                        "13:00",
+                        1,
+                        0)
+        );
 
-        dao.deleteNotification(1);
-//
+
 //        dao.updateNotification(
 //                new NotificationDao(
 //                        1,
@@ -95,5 +94,30 @@ public class HomeController {
 
         ObservableList<NotificationTable> data = FXCollections.observableArrayList(notificationTable);
         tableView.setItems(data);
+    }
+
+    @FXML
+    public void deleteNotification() {
+        NotificationTable notificationTable = tableView.getSelectionModel().getSelectedItem();
+
+        if (notificationTable == null) {
+            System.out.println("Nenhum item selecionado!");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmação");
+        alert.setHeaderText("Excluir notificação");
+        alert.setContentText("Tem certeza que deseja excluir a notificação " + notificationTable.getTitle() + "?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            String rerult = dao.deleteNotification(notificationTable.getId());
+
+            if (Objects.equals(rerult, "Dado deletado com sucesso!")) {
+                tableView.getItems().remove(notificationTable);
+            }
+        }
     }
 }

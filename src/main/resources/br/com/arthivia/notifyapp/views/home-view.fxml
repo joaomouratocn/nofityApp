@@ -32,6 +32,6 @@
     <HBox alignment="CENTER_RIGHT" prefHeight="22.0" prefWidth="476.0" spacing="10.0">
         <Button mnemonicParsing="false" text="Inserir" />
         <Button mnemonicParsing="false" text="Alterar" />
-        <Button mnemonicParsing="false" text="Deletar" />
+        <Button mnemonicParsing="false" text="Deletar" onAction="#deleteNotification"/>
     </HBox>
 </VBox>
