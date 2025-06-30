@@ -54,6 +54,19 @@ public class DAO {
         }
     }
 
+    public void setNotified(Integer notified, Integer notifyId) {
+        String sqlSetNotified = "UPDATE notify SET notified=? WHERE id=?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlSetNotified)) {
+            preparedStatement.setInt(1, notified);
+            preparedStatement.setInt(2, notifyId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void insertDayOfWeek(List<Integer> daysWeek, int generatedId) throws SQLException {
         String sqlInsertDayWeek = "INSERT INTO notifydayweek(notifyid, dayweek)VALUES(?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlInsertDayWeek)) {
@@ -95,6 +108,7 @@ public class DAO {
 
             preparedStatement.executeUpdate();
 
+            clearDayWeeks(notificationDao.getId(), notificationDao.getDayWeek());
             insertDayOfWeek(notificationDao.getDayWeek(), notificationDao.getId());
 
             return "Dados alterados com sucesso!";
@@ -104,11 +118,18 @@ public class DAO {
         }
     }
 
-    private void clearDayWeeks(){
+    private void clearDayWeeks(Integer notificationId, List<Integer> dayWeekList) throws SQLException {
         String sqlCleanDaysWeek = """
-            DELETE FROM notifydayweek
-                    WHERE notifyid=0 AND dayweek=0;
-        """;    }
+                    DELETE FROM notifydayweek WHERE notifyid=?;
+                """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlCleanDaysWeek)) {
+            for (Integer dayWeek : dayWeekList) {
+                preparedStatement.setInt(1, notificationId);
+                preparedStatement.executeUpdate();
+            }
+        }
+    }
 
     public List<NotificationDao> getAllNotification() {
         String sqlGetAll = """

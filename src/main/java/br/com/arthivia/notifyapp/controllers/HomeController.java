@@ -18,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static java.time.DayOfWeek.MONDAY;
-import static java.time.DayOfWeek.TUESDAY;
-
 public class HomeController {
     @FXML
     private TableView<NotificationTable> tableView;
@@ -75,22 +72,22 @@ public class HomeController {
 //                    0)
 //        );
 
-//        dao.deleteNotification(1);
-
+        dao.deleteNotification(1);
+//
 //        dao.updateNotification(
-//           new NotificationDao(
-//                    2,
-//                    "Sistema",
-//                    "Verificar sistema",
-//                    List.of(5, 6),
-//                    "13:00",
-//                    0,
-//                    0)
+//                new NotificationDao(
+//                        1,
+//                        "Sistema",
+//                        "Verificar sistema",
+//                        List.of(7),
+//                        "13:00",
+//                        1,
+//                        0)
 //        );
 
         List<NotificationTable> notificationTable = new ArrayList<>();
         List<NotificationDao> allNotification = dao.getAllNotification();
-        for (NotificationDao notificationDao: allNotification){
+        for (NotificationDao notificationDao : allNotification) {
             Util.convertNotificationTable(notificationDao);
             notificationTable.add(Util.convertNotificationTable(notificationDao));
         }
