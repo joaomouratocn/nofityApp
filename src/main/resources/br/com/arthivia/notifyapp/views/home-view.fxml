@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox maxHeight="380.0" maxWidth="600.0" minHeight="380.0" minWidth="600.0" prefHeight="380.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: D9D9D9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.arthivia.notifyapp.controllers.HomeController">
+    <padding>
+        <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+    </padding>
+    <HBox alignment="CENTER_RIGHT" maxHeight="64.0" minHeight="64.0" prefHeight="64.0">
+        <Label prefHeight="35.0" prefWidth="469.0" text="Notificações">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="64.0" fitWidth="197.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/logo-arthivia.png" />
+        </ImageView>
+    </HBox>
+    <TableView fx:id="tableView" prefHeight="270.0" prefWidth="476.0">
+        <columns>
+            <TableColumn fx:id="colEnable" prefWidth="56.0" style="-fx-alignment: CENTER;" text="ATIVO" />
+         <TableColumn fx:id="colDayWeek" prefWidth="139.0" text="DIA DA SEMANA" />
+            <TableColumn fx:id="colHour" prefWidth="96.0" style="-fx-alignment: CENTER;" text="HORARIO" />
+            <TableColumn fx:id="colTitle" prefWidth="155.0" text="TITULO" />
+            <TableColumn fx:id="colMessage" prefWidth="218.0" text="MENSAGEM" />
+        </columns>
+    </TableView>
+    <HBox alignment="CENTER_RIGHT" prefHeight="22.0" prefWidth="476.0" spacing="10.0">
+        <Button mnemonicParsing="false" text="Inserir" />
+        <Button mnemonicParsing="false" text="Alterar" />
+        <Button mnemonicParsing="false" text="Deletar" />
+    </HBox>
+</VBox>
