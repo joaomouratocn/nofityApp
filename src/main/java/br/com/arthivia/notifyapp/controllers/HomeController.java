@@ -1,10 +1,12 @@
 package br.com.arthivia.notifyapp.controllers;
 
+import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
+import br.com.arthivia.notifyapp.model.NotificationTable;
+import br.com.arthivia.notifyapp.util.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,11 +14,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import static java.time.DayOfWeek.MONDAY;
+import static java.time.DayOfWeek.TUESDAY;
 
 public class HomeController {
     @FXML
-    private TableView<NotificationDao> tableView;
+    private TableView<NotificationTable> tableView;
     @FXML
     private TableColumn<NotificationDao, Integer> colEnable;
     @FXML
@@ -28,8 +35,10 @@ public class HomeController {
     @FXML
     private TableColumn<NotificationDao, String> colMessage;
 
+    DAO dao = new DAO();
+
     @FXML
-    public void initialize(){
+    public void initialize() {
         colDayWeek.setCellValueFactory(new PropertyValueFactory<>("dayWeek"));
         colHour.setCellValueFactory(new PropertyValueFactory<>("hour"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -55,11 +64,39 @@ public class HomeController {
             }
         });
 
-        // Dados de exemplo
-        ObservableList<NotificationDao> dados = FXCollections.observableArrayList(
-                new NotificationDao(1, "Reunião", "Reunião com equipe", "SEGUNDA-FEIRA","10:00", 1, 0),
-                new NotificationDao(2, "Alerta", "Verificar sistema", "TERÇA-FEIRA", "15:00", 0, 0)
-        );
-        tableView.setItems(dados);
+//        dao.insertNotification(
+//            new NotificationDao(
+//                    0,
+//                    "Sistema",
+//                    "Reunião Sistema",
+//                    List.of(7, 3),
+//                    "13:00",
+//                    1,
+//                    0)
+//        );
+
+//        dao.deleteNotification(1);
+
+//        dao.updateNotification(
+//           new NotificationDao(
+//                    2,
+//                    "Sistema",
+//                    "Verificar sistema",
+//                    List.of(5, 6),
+//                    "13:00",
+//                    0,
+//                    0)
+//        );
+
+        List<NotificationTable> notificationTable = new ArrayList<>();
+        List<NotificationDao> allNotification = dao.getAllNotification();
+        for (NotificationDao notificationDao: allNotification){
+            Util.convertNotificationTable(notificationDao);
+            notificationTable.add(Util.convertNotificationTable(notificationDao));
+        }
+
+
+        ObservableList<NotificationTable> data = FXCollections.observableArrayList(notificationTable);
+        tableView.setItems(data);
     }
 }

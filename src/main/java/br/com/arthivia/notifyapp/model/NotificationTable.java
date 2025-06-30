@@ -2,11 +2,11 @@ package br.com.arthivia.notifyapp.model;
 
 import java.util.List;
 
-public class NotificationDao {
+public class NotificationTable {
     private final int id;
     private final String title;
     private final String message;
-    private final List<Integer> dayWeek;
+    private final List<String> dayWeek;
     private final String hour;
     private final int enable;
     private final int notified;
@@ -23,7 +23,7 @@ public class NotificationDao {
         return message;
     }
 
-    public List<Integer> getDayWeek() {
+    public List<String> getDayWeek() {
         return dayWeek;
     }
 
@@ -39,7 +39,7 @@ public class NotificationDao {
         return notified;
     }
 
-    public NotificationDao(int id, String title, String message, List<Integer> dayWeek, String hour, int enable, int notified) {
+    public NotificationTable(int id, String title, String message, List<String> dayWeek, String hour, int enable, int notified) {
         this.id = id;
         this.title = title;
         this.message = message;

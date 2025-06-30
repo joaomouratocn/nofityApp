@@ -23,7 +23,7 @@
     <TableView fx:id="tableView" prefHeight="270.0" prefWidth="476.0">
         <columns>
             <TableColumn fx:id="colEnable" prefWidth="56.0" style="-fx-alignment: CENTER;" text="ATIVO" />
-         <TableColumn fx:id="colDayWeek" prefWidth="139.0" text="DIA DA SEMANA" />
+         <TableColumn fx:id="colDayWeek" prefWidth="139.0" text="DIAS DA SEMANA" />
             <TableColumn fx:id="colHour" prefWidth="96.0" style="-fx-alignment: CENTER;" text="HORARIO" />
             <TableColumn fx:id="colTitle" prefWidth="155.0" text="TITULO" />
             <TableColumn fx:id="colMessage" prefWidth="218.0" text="MENSAGEM" />

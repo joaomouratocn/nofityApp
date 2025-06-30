@@ -1,5 +1,6 @@
 package br.com.arthivia.notifyapp;
 
+import br.com.arthivia.notifyapp.database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
