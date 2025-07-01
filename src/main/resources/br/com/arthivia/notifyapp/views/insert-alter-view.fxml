@@ -4,17 +4,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="361.0" prefWidth="454.0" spacing="15.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="BOTTOM_LEFT" prefHeight="41.0" prefWidth="600.0" spacing="10.0">
          <children>
             <VBox prefHeight="44.0" prefWidth="408.0">
                <children>
-                  <Label text="Horario" />
-                  <TextField prefHeight="26.0" prefWidth="269.0" />
+                  <Label text="Horario:" />
+                  <TextField prefHeight="26.0" prefWidth="204.0" />
                </children>
             </VBox>
-            <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="500.0" text="Ativo" />
+            <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="452.0" text="Ativo" />
          </children>
       </HBox>
       <VBox prefHeight="0.0" prefWidth="493.0">
@@ -33,6 +33,24 @@
             </HBox>
          </children>
       </VBox>
+      <VBox prefHeight="28.0" prefWidth="476.0">
+         <children>
+            <Label text="Título:" />
+            <TextField />
+         </children>
+      </VBox>
+      <VBox prefHeight="146.0" prefWidth="430.0">
+         <children>
+            <Label text="Mensagem:" />
+            <TextArea prefHeight="136.0" prefWidth="430.0" />
+         </children>
+      </VBox>
+      <HBox alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="430.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Salvar" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Cancelar" />
+         </children>
+      </HBox>
    </children>
    <padding>
       <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />

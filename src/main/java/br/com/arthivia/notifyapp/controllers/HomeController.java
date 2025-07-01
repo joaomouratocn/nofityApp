@@ -7,11 +7,17 @@ import br.com.arthivia.notifyapp.util.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +41,7 @@ public class HomeController {
     DAO dao = new DAO();
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         colDayWeek.setCellValueFactory(new PropertyValueFactory<>("dayWeek"));
         colHour.setCellValueFactory(new PropertyValueFactory<>("hour"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -97,7 +103,7 @@ public class HomeController {
     }
 
     @FXML
-    public void deleteNotification() {
+    private void deleteNotification() {
         NotificationTable notificationTable = tableView.getSelectionModel().getSelectedItem();
 
         if (notificationTable == null) {
@@ -118,6 +124,22 @@ public class HomeController {
             if (Objects.equals(rerult, "Dado deletado com sucesso!")) {
                 tableView.getItems().remove(notificationTable);
             }
+        }
+    }
+
+    @FXML
+    private void insertNotification() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/arthivia/notifyapp/views/insert-alter-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Cadastro");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

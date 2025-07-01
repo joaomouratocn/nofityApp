@@ -11,7 +11,7 @@ import java.io.IOException;
 public class StartApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("views/home-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("/views/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setMinWidth(700);
         stage.setMinHeight(380);
