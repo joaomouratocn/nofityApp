@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="380.0" maxWidth="600.0" minHeight="380.0" minWidth="600.0" prefHeight="380.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: D9D9D9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.arthivia.notifyapp.controllers.HomeController">
+<VBox maxHeight="380.0" maxWidth="700.0" minHeight="380.0" minWidth="700.0" prefHeight="380.0" prefWidth="700.0" spacing="10.0" style="-fx-background-color: D9D9D9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.arthivia.notifyapp.controllers.HomeController">
     <padding>
         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
     </padding>
