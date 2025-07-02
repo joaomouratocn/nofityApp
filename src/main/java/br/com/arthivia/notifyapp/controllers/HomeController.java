@@ -2,8 +2,6 @@ package br.com.arthivia.notifyapp.controllers;
 
 import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
-import br.com.arthivia.notifyapp.model.NotificationTable;
-import br.com.arthivia.notifyapp.util.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,14 +16,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class HomeController {
     @FXML
-    private TableView<NotificationTable> tableView;
+    private TableView<NotificationDao> tableView;
     @FXML
     private TableColumn<NotificationDao, Integer> colEnable;
     @FXML
@@ -37,11 +35,24 @@ public class HomeController {
     @FXML
     private TableColumn<NotificationDao, String> colMessage;
     @FXML
+    private Button btnInsert;
+    @FXML
+    private Button btnUpdate;
+    @FXML
+    private Button btnDelete;
 
     DAO dao = new DAO();
 
     @FXML
     private void initialize() {
+        mock();
+        configureTable();
+        configureBtnInsert();
+        configureBtnUpdate();
+        configureBtnDelete();
+    }
+
+    private void configureTable() {
         colDayWeek.setCellValueFactory(new PropertyValueFactory<>("dayWeek"));
         colHour.setCellValueFactory(new PropertyValueFactory<>("hour"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -67,12 +78,93 @@ public class HomeController {
             }
         });
 
+        ObservableList<NotificationDao> data = FXCollections.observableArrayList(dao.getAllNotification());
+        tableView.setItems(data);
+    }
+
+    private void configureBtnInsert() {
+        btnInsert.setOnMouseClicked(mouseEvent -> {
+            openInsertOrUpdateNotification("Cadastrar", null);
+        });
+    }
+
+    private void configureBtnUpdate() {
+        btnUpdate.setOnMouseClicked(mouseEvent -> {
+            var notificationTable = getSelectedItem();
+            if (notificationTable == null) {
+                return;
+            }
+            openInsertOrUpdateNotification("Alterar", notificationTable);
+        });
+    }
+
+    private void configureBtnDelete() {
+        btnDelete.setOnMouseClicked(mouseEvent -> {
+            var notificationDao = getSelectedItem();
+            if (notificationDao == null) {
+                return;
+            }
+            deleteNotification(notificationDao);
+        });
+    }
+
+    private NotificationDao getSelectedItem() {
+        if (tableView.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Nenhuma notificação selecionada!");
+            alert.showAndWait();
+            return null;
+        }
+
+        return tableView.getSelectionModel().getSelectedItem();
+    }
+
+    private void deleteNotification(NotificationDao notificationDao) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmação");
+        alert.setHeaderText("Excluir notificação");
+        alert.setContentText("Tem certeza que deseja excluir a notificação " + notificationDao.getTitle() + "?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            String msg = dao.deleteNotification(notificationDao.getId());
+
+            if (Objects.equals(msg, "Dado deletado com sucesso!")) {
+                tableView.getItems().remove(notificationDao);
+            }
+        }
+    }
+
+
+    private void openInsertOrUpdateNotification(String typeAction, NotificationDao notificationDao) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/arthivia/notifyapp/views/insert-update-view.fxml"));
+            Parent root = loader.load();
+
+            if (notificationDao != null) {
+                InsertUpdateController insertUpdateController = loader.getController();
+                insertUpdateController.loadNotification(notificationDao);
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle(typeAction);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void mock(){
         dao.insertNotification(
                 new NotificationDao(
                         0,
                         "Sistema",
                         "Reunião Sistema",
-                        List.of(7, 3),
+                        List.of(DayOfWeek.MONDAY, DayOfWeek.SATURDAY),
                         "13:00",
                         1,
                         0)
@@ -89,57 +181,5 @@ public class HomeController {
 //                        1,
 //                        0)
 //        );
-
-        List<NotificationTable> notificationTable = new ArrayList<>();
-        List<NotificationDao> allNotification = dao.getAllNotification();
-        for (NotificationDao notificationDao : allNotification) {
-            Util.convertNotificationTable(notificationDao);
-            notificationTable.add(Util.convertNotificationTable(notificationDao));
-        }
-
-
-        ObservableList<NotificationTable> data = FXCollections.observableArrayList(notificationTable);
-        tableView.setItems(data);
-    }
-
-    @FXML
-    private void deleteNotification() {
-        NotificationTable notificationTable = tableView.getSelectionModel().getSelectedItem();
-
-        if (notificationTable == null) {
-            System.out.println("Nenhum item selecionado!");
-            return;
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmação");
-        alert.setHeaderText("Excluir notificação");
-        alert.setContentText("Tem certeza que deseja excluir a notificação " + notificationTable.getTitle() + "?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-
-            String rerult = dao.deleteNotification(notificationTable.getId());
-
-            if (Objects.equals(rerult, "Dado deletado com sucesso!")) {
-                tableView.getItems().remove(notificationTable);
-            }
-        }
-    }
-
-    @FXML
-    private void insertNotification() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/arthivia/notifyapp/views/insert-alter-view.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Cadastro");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

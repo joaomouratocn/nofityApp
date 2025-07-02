@@ -3,6 +3,7 @@ package br.com.arthivia.notifyapp.database;
 import br.com.arthivia.notifyapp.model.NotificationDao;
 
 import java.sql.*;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,12 +68,12 @@ public class DAO {
         }
     }
 
-    private void insertDayOfWeek(List<Integer> daysWeek, int generatedId) throws SQLException {
+    private void insertDayOfWeek(List<DayOfWeek> daysWeek, int generatedId) throws SQLException {
         String sqlInsertDayWeek = "INSERT INTO notifydayweek(notifyid, dayweek)VALUES(?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlInsertDayWeek)) {
-            for (Integer day : daysWeek) {
+            for (DayOfWeek day : daysWeek) {
                 preparedStatement.setInt(1, generatedId);
-                preparedStatement.setInt(2, day);
+                preparedStatement.setInt(2, day.getValue());
 
                 preparedStatement.executeUpdate();
             }
@@ -108,7 +109,7 @@ public class DAO {
 
             preparedStatement.executeUpdate();
 
-            clearDayWeeks(notificationDao.getId(), notificationDao.getDayWeek());
+            clearDayWeeks(notificationDao.getId());
             insertDayOfWeek(notificationDao.getDayWeek(), notificationDao.getId());
 
             return "Dados alterados com sucesso!";
@@ -118,16 +119,14 @@ public class DAO {
         }
     }
 
-    private void clearDayWeeks(Integer notificationId, List<Integer> dayWeekList) throws SQLException {
+    private void clearDayWeeks(Integer notificationId) throws SQLException {
         String sqlCleanDaysWeek = """
                     DELETE FROM notifydayweek WHERE notifyid=?;
                 """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlCleanDaysWeek)) {
-            for (Integer dayWeek : dayWeekList) {
-                preparedStatement.setInt(1, notificationId);
-                preparedStatement.executeUpdate();
-            }
+            preparedStatement.setInt(1, notificationId);
+            preparedStatement.executeUpdate();
         }
     }
 
@@ -163,7 +162,7 @@ public class DAO {
                 }
                 int dayValue = resultSet.getInt("dayweek");
                 if (dayValue >= 1 && dayValue <= 7) {
-                    notificationDao.getDayWeek().add(dayValue);
+                    notificationDao.getDayWeek().add(DayOfWeek.of(dayValue));
                 }
             }
             list = new ArrayList<>(map.values());

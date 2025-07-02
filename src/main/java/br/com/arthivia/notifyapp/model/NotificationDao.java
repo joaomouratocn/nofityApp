@@ -1,12 +1,13 @@
 package br.com.arthivia.notifyapp.model;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 public class NotificationDao {
     private final int id;
     private final String title;
     private final String message;
-    private final List<Integer> dayWeek;
+    private final List<DayOfWeek> dayWeek;
     private final String hour;
     private final int enable;
     private final int notified;
@@ -23,7 +24,7 @@ public class NotificationDao {
         return message;
     }
 
-    public List<Integer> getDayWeek() {
+    public List<DayOfWeek> getDayWeek() {
         return dayWeek;
     }
 
@@ -39,7 +40,7 @@ public class NotificationDao {
         return notified;
     }
 
-    public NotificationDao(int id, String title, String message, List<Integer> dayWeek, String hour, int enable, int notified) {
+    public NotificationDao(int id, String title, String message, List<DayOfWeek> dayWeek, String hour, int enable, int notified) {
         this.id = id;
         this.title = title;
         this.message = message;

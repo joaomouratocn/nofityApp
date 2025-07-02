@@ -1,6 +1,5 @@
 package br.com.arthivia.notifyapp;
 
-import br.com.arthivia.notifyapp.database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,10 +10,10 @@ import java.io.IOException;
 public class StartApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("/views/home-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("views/home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setMinWidth(700);
-        stage.setMinHeight(380);
+        stage.setMinHeight(500);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
