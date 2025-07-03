@@ -3,6 +3,7 @@ module br.com.arthivia.notifyapp {
     requires javafx.fxml;
     requires java.sql;
     requires jdk.jshell;
+    requires java.desktop;
 
     opens br.com.arthivia.notifyapp to javafx.fxml;
     opens br.com.arthivia.notifyapp.model to javafx.base;

@@ -63,7 +63,7 @@ public class HomeController {
         colDayWeek.setCellValueFactory(cellData -> {
             List<DayOfWeek> days = cellData.getValue().getDayWeek();
             String formatedDays = days.stream()
-                    .map(d -> d.getDisplayName(TextStyle.SHORT,new Locale("pt", "BR")))
+                    .map(d -> d.getDisplayName(TextStyle.SHORT, new Locale("pt", "BR")))
                     .collect(Collectors.joining(" "));
             return new SimpleStringProperty(formatedDays);
         });
@@ -90,7 +90,7 @@ public class HomeController {
         tableView.setRowFactory(notificationDaoTableView -> {
             TableRow<NotificationDao> row = new TableRow<>();
             row.setOnMouseClicked(mouseEvent -> {
-                if(mouseEvent.getClickCount() == 2 && !row.isEmpty()){
+                if (mouseEvent.getClickCount() == 2 && !row.isEmpty()) {
                     NotificationDao item = row.getItem();
                     openInsertOrUpdateNotification("Alterar", item);
                 }

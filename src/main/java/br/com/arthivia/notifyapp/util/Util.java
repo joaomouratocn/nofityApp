@@ -1,8 +1,16 @@
 package br.com.arthivia.notifyapp.util;
 
+import br.com.arthivia.notifyapp.database.DAO;
+import br.com.arthivia.notifyapp.model.NotificationDao;
+
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.time.DayOfWeek.*;
 
@@ -23,5 +31,33 @@ public class Util {
             });
         }
         return outputList;
+    }
+
+    public static void startNotificationService() {
+        var dao = new DAO();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                LocalDateTime now = LocalDateTime.now();
+                DayOfWeek today = now.getDayOfWeek();
+                String currentTime = now.format(DateTimeFormatter.ofPattern("HH:mm"));
+
+                List<NotificationDao> notifications = dao.getAllNotification();
+
+                for (NotificationDao notificationDao : notifications) {
+                    if (!notificationDao.getDayWeek().contains(today)) continue;
+                    if (!notificationDao.getHour().equals(currentTime)) continue;
+
+                    if (notificationDao.getNotified() == 0) {
+                        System.out.println(notificationDao.getTitle());
+                        dao.setNotified(notificationDao.getId());
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 0, 1, TimeUnit.MINUTES);
     }
 }

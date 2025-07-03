@@ -55,11 +55,11 @@ public class DAO {
         }
     }
 
-    public void setNotified(Integer notified, Integer notifyId) {
+    public void setNotified(Integer notifyId) {
         String sqlSetNotified = "UPDATE notify SET notified=? WHERE id=?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlSetNotified)) {
-            preparedStatement.setInt(1, notified);
+            preparedStatement.setInt(1, 1);
             preparedStatement.setInt(2, notifyId);
 
             preparedStatement.executeUpdate();
@@ -97,7 +97,7 @@ public class DAO {
 
     public String updateNotification(NotificationDao notificationDao) {
         String sqlUpdate = """
-                    UPDATE notify SET title=?, message=?, "hour"=?, enable=? WHERE id=?;
+                    UPDATE notify SET title=?, message=?, "hour"=?, enable=?, notified=? WHERE id=?;
                 """;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlUpdate)) {
@@ -105,7 +105,8 @@ public class DAO {
             preparedStatement.setString(2, notificationDao.getMessage());
             preparedStatement.setString(3, notificationDao.getHour());
             preparedStatement.setInt(4, notificationDao.getEnable());
-            preparedStatement.setInt(5, notificationDao.getId());
+            preparedStatement.setInt(5, notificationDao.getNotified());
+            preparedStatement.setInt(6, notificationDao.getId());
 
             preparedStatement.executeUpdate();
 
