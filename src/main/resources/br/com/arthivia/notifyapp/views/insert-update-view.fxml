@@ -13,13 +13,13 @@
         <VBox prefHeight="44.0" prefWidth="408.0">
             <Label text="Horario: - ex: 12:00" />
             <TextField fx:id="txtHour" prefHeight="26.0" prefWidth="204.0" />
-            <Label fx:id="lbErrorHour" text="Horario invalído!" textFill="#f82e2e">
+            <Label fx:id="lbErrorHour" text="Horario invalído" textFill="#f82e2e">
                 <font>
                     <Font size="10.0" />
                 </font>
             </Label>
         </VBox>
-        <CheckBox mnemonicParsing="false" prefHeight="18.0" prefWidth="452.0" selected="true" text="Ativo" fx:id="ckbEnable"/>
+        <CheckBox fx:id="ckbEnable" mnemonicParsing="false" prefHeight="18.0" prefWidth="452.0" selected="true" text="Ativo" />
     </HBox>
     <VBox prefHeight="0.0" prefWidth="493.0">
         <Label prefHeight="18.0" prefWidth="127.0" text="Dias da semana:" />
@@ -32,7 +32,7 @@
             <CheckBox fx:id="ckbSex" mnemonicParsing="false" text="Sex." />
             <CheckBox fx:id="ckbSab" mnemonicParsing="false" text="Sab." />
         </HBox>
-        <Label fx:id="lbErrorDays" text="Selecione ao meno um dia" textFill="#f82e2e">
+        <Label fx:id="lbErrorDays" text="Selecione um dia" textFill="#f82e2e">
             <font>
                 <Font size="10.0" />
             </font>
@@ -49,10 +49,10 @@
     </VBox>
     <VBox prefHeight="146.0" prefWidth="430.0">
         <Label text="Mensagem:" />
-        <TextArea prefHeight="136.0" prefWidth="430.0" fx:id="textMessage"/>
+        <TextArea fx:id="textMessage" prefHeight="136.0" prefWidth="430.0" />
     </VBox>
     <HBox alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="430.0" spacing="10.0">
-        <Button mnemonicParsing="false" onAction="#insertNotification" prefHeight="25.0" prefWidth="134.0" text="Salvar" />
-        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Cancelar" />
+        <Button fx:id="btnSave" mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Salvar" />
+        <Button fx:id="btnClose" mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Fechar" />
     </HBox>
 </VBox>

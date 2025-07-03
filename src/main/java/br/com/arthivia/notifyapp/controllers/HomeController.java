@@ -2,6 +2,7 @@ package br.com.arthivia.notifyapp.controllers;
 
 import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,9 +18,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class HomeController {
     @FXML
@@ -45,7 +49,6 @@ public class HomeController {
 
     @FXML
     private void initialize() {
-        mock();
         configureTable();
         configureBtnInsert();
         configureBtnUpdate();
@@ -53,11 +56,17 @@ public class HomeController {
     }
 
     private void configureTable() {
-        colDayWeek.setCellValueFactory(new PropertyValueFactory<>("dayWeek"));
         colHour.setCellValueFactory(new PropertyValueFactory<>("hour"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colMessage.setCellValueFactory(new PropertyValueFactory<>("message"));
         colEnable.setCellValueFactory(new PropertyValueFactory<>("enable"));
+        colDayWeek.setCellValueFactory(cellData -> {
+            List<DayOfWeek> days = cellData.getValue().getDayWeek();
+            String formatedDays = days.stream()
+                    .map(d -> d.getDisplayName(TextStyle.SHORT,new Locale("pt", "BR")))
+                    .collect(Collectors.joining(" "));
+            return new SimpleStringProperty(formatedDays);
+        });
 
         colEnable.setCellFactory(column -> new TableCell<>() {
             private final ImageView imageView = new ImageView();
@@ -78,6 +87,21 @@ public class HomeController {
             }
         });
 
+        tableView.setRowFactory(notificationDaoTableView -> {
+            TableRow<NotificationDao> row = new TableRow<>();
+            row.setOnMouseClicked(mouseEvent -> {
+                if(mouseEvent.getClickCount() == 2 && !row.isEmpty()){
+                    NotificationDao item = row.getItem();
+                    openInsertOrUpdateNotification("Alterar", item);
+                }
+            });
+            return row;
+        });
+
+        loadData();
+    }
+
+    private void loadData() {
         ObservableList<NotificationDao> data = FXCollections.observableArrayList(dao.getAllNotification());
         tableView.setItems(data);
     }
@@ -153,33 +177,10 @@ public class HomeController {
             stage.setResizable(false);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+
+            loadData();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    private void mock(){
-        dao.insertNotification(
-                new NotificationDao(
-                        0,
-                        "Sistema",
-                        "Reunião Sistema",
-                        List.of(DayOfWeek.MONDAY, DayOfWeek.SATURDAY),
-                        "13:00",
-                        1,
-                        0)
-        );
-
-
-//        dao.updateNotification(
-//                new NotificationDao(
-//                        1,
-//                        "Sistema",
-//                        "Verificar sistema",
-//                        List.of(7),
-//                        "13:00",
-//                        1,
-//                        0)
-//        );
     }
 }
