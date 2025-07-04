@@ -11,14 +11,15 @@ public class DatabaseConnection {
     private static final String DB_URL = "jdbc:sqlite:notifyapp.db";
     private static Connection connection;
 
-    public DatabaseConnection() {}
+    private DatabaseConnection() {}
 
     public static Connection getInstance() {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(DB_URL);
                 verifyTables(connection);
-            } catch (SQLException e) {LogApp.logError(e.getMessage());
+            } catch (SQLException e) {LogApp.getInstance().logError(e.getMessage());
+                LogApp.getInstance().logError(e.getMessage());
                 System.out.println("Erro ao tentar acessar o banco de dados: " + e.getMessage());
             }
         }
@@ -53,7 +54,7 @@ public class DatabaseConnection {
             statement.execute(tableDayWeekNotify);
             System.out.println("tabela dias das notificações criada");
         } catch (SQLException e) {
-            LogApp.logError("Error ao realizar esta operação: " + e.getMessage());
+            LogApp.getInstance().logError("Error ao realizar esta operação: " + e.getMessage());
             System.out.println(e.getMessage());
         }
     }

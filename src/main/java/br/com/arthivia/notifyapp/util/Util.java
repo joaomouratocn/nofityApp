@@ -34,7 +34,7 @@ public class Util {
     }
 
     public static void startNotificationService() {
-        var dao = new DAO();
+        var dao = DAO.getInstance();
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
         scheduler.scheduleAtFixedRate(() -> {
@@ -56,7 +56,7 @@ public class Util {
                 }
 
             } catch (Exception e) {
-                LogApp.logError("Erro ao tentar executar este operção: " + e.getMessage());
+                LogApp.getInstance().logError("Erro ao tentar executar este operção: " + e.getMessage());
             }
         }, 0, 1, TimeUnit.MINUTES);
     }

@@ -55,7 +55,7 @@ public class InsertUpdateController {
 
     @FXML
     private void initialize() {
-        dao = new DAO();
+        dao = DAO.getInstance();
         configureLabels();
         configureTxtHour();
         configureTxtTitle();

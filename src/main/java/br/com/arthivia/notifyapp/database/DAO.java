@@ -11,11 +11,18 @@ import java.util.List;
 import java.util.Map;
 
 public class DAO {
-
     private final Connection connection;
+    private static DAO dao;
 
-    public DAO() {
+    private DAO() {
         connection = DatabaseConnection.getInstance();
+    }
+
+    public static DAO getInstance(){
+        if (dao == null){
+            dao = new DAO();
+        }
+        return dao;
     }
 
     public boolean insertNotification(NotificationDao notificationDao) {
@@ -42,7 +49,7 @@ public class DAO {
                         }
                     }
                 } catch (SQLException e) {
-                    LogApp.logError("Erro ao tentar executa");
+                    LogApp.getInstance().logError("Erro ao tentar executa");
                     System.out.println(e.getMessage());
                 }
             }
@@ -57,7 +64,7 @@ public class DAO {
 
             return true;
         } catch (SQLException e) {
-            LogApp.logError("Erro ao tenta executar esta operação " + e.getMessage());
+            LogApp.getInstance().logError("Erro ao tenta executar esta operação " + e.getMessage());
             return false;
         }
     }
@@ -86,7 +93,7 @@ public class DAO {
             }
             return true;
         } catch (SQLException e) {
-            LogApp.logError("Erro ao tentar executar esta operação " + e.getMessage());
+            LogApp.getInstance().logError("Erro ao tentar executar esta operação " + e.getMessage());
             return false;
         }
     }
@@ -141,13 +148,13 @@ public class DAO {
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            LogApp.logError("Erro ao tentar executar esta operação: " + e.getMessage());
+            LogApp.getInstance().logError("Erro ao tentar executar esta operação: " + e.getMessage());
             return false;
         } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                LogApp.logError("Erro ao tentar executar esta operção: " + e.getMessage());
+                LogApp.getInstance().logError("Erro ao tentar executar esta operção: " + e.getMessage());
             }
         }
     }
@@ -162,7 +169,7 @@ public class DAO {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            LogApp.logError("Erro ao tentar executar esta tarefa: " + e.getMessage());
+            LogApp.getInstance().logError("Erro ao tentar executar esta tarefa: " + e.getMessage());
             return false;
         }
     }

@@ -11,8 +11,18 @@ import java.time.format.DateTimeFormatter;
 public class LogApp {
     private static final String LOG_FILE = "logs.txt";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private static LogApp logApp;
 
-    public static void logError(String errorMessage){
+    private LogApp(){}
+
+    public static LogApp getInstance(){
+        if(logApp == null){
+            logApp = new LogApp();
+        }
+        return logApp;
+    }
+
+    public void logError(String errorMessage){
         try{
             Path path = Paths.get(LOG_FILE);
             String logEntry = String.format("[%s] Error: %s%n", LocalDateTime.now().format(DATE_TIME_FORMATTER),errorMessage);

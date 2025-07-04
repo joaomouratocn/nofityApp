@@ -46,10 +46,11 @@ public class HomeController {
     @FXML
     private Button btnDelete;
 
-    DAO dao = new DAO();
+    private DAO dao;
 
     @FXML
     private void initialize() {
+        dao = DAO.getInstance();
         configureTable();
         configureBtnInsert();
         configureBtnUpdate();
@@ -181,7 +182,7 @@ public class HomeController {
 
             loadData();
         } catch (IOException e) {
-            LogApp.logError("Erro ao tentar executar esta operação: " + e.getMessage());
+            LogApp.getInstance().logError("Erro ao tentar executar esta operação: " + e.getMessage());
         }
     }
 }
