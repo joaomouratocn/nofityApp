@@ -127,9 +127,19 @@ public class InsertUpdateController {
                     0);
 
             if (notificationId == 0) {
-                dao.insertNotification(notificationDao);
+                boolean insertResult = dao.insertNotification(notificationDao);
+                if(!insertResult){
+                    System.out.println("Inserido com sucesso!");
+                }else {
+                    System.out.println("Erro ao inserir, ver LOGS");
+                }
             } else {
-                dao.updateNotification(notificationDao);
+                boolean updateResult = dao.updateNotification(notificationDao);
+                if (updateResult){
+                    System.out.println("Atualizado com sucesso!");
+                }else{
+                    System.out.println("Erro ao atualizar, ver LOGS");
+                }
             }
             close();
         }

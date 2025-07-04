@@ -56,7 +56,7 @@ public class Util {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                LogApp.logError("Erro ao tentar executar este operção: " + e.getMessage());
             }
         }, 0, 1, TimeUnit.MINUTES);
     }

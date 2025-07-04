@@ -1,6 +1,7 @@
 package br.com.arthivia.notifyapp.database;
 
 import br.com.arthivia.notifyapp.model.NotificationDao;
+import br.com.arthivia.notifyapp.util.LogApp;
 
 import java.sql.*;
 import java.time.DayOfWeek;
@@ -17,12 +18,13 @@ public class DAO {
         connection = DatabaseConnection.getInstance();
     }
 
-    public String insertNotification(NotificationDao notificationDao) {
+    public boolean insertNotification(NotificationDao notificationDao) {
         String sqlInsert = "INSERT INTO notify(title, message, hour, enable, notified) VALUES (?, ?, ?, ?,?)";
         int generatedId = 0;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
-
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, notificationDao.getTitle());
             preparedStatement.setString(2, notificationDao.getMessage());
             preparedStatement.setString(3, notificationDao.getHour());
@@ -40,18 +42,23 @@ public class DAO {
                         }
                     }
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    LogApp.logError("Erro ao tentar executa");
+                    System.out.println(e.getMessage());
                 }
             }
 
             if (generatedId != 0) {
-                insertDayOfWeek(notificationDao.getDayWeek(), generatedId);
+                boolean result = insertDayOfWeek(notificationDao.getDayWeek(), generatedId);
+                if (!result) {
+                    connection.rollback();
+                    return false;
+                }
             }
 
-            return "Dados inseridos com sucesso!";
+            return true;
         } catch (SQLException e) {
-            System.out.println("Error ao inserir dados: " + e.getMessage());
-            return "Error ao inserir dados: " + e.getMessage();
+            LogApp.logError("Erro ao tenta executar esta operação " + e.getMessage());
+            return false;
         }
     }
 
@@ -68,7 +75,7 @@ public class DAO {
         }
     }
 
-    private void insertDayOfWeek(List<DayOfWeek> daysWeek, int generatedId) throws SQLException {
+    private boolean insertDayOfWeek(List<DayOfWeek> daysWeek, int generatedId) throws SQLException {
         String sqlInsertDayWeek = "INSERT INTO notifydayweek(notifyid, dayweek)VALUES(?,?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlInsertDayWeek)) {
             for (DayOfWeek day : daysWeek) {
@@ -77,6 +84,10 @@ public class DAO {
 
                 preparedStatement.executeUpdate();
             }
+            return true;
+        } catch (SQLException e) {
+            LogApp.logError("Erro ao tentar executar esta operação " + e.getMessage());
+            return false;
         }
     }
 
@@ -95,12 +106,15 @@ public class DAO {
         }
     }
 
-    public String updateNotification(NotificationDao notificationDao) {
+    public boolean updateNotification(NotificationDao notificationDao) {
         String sqlUpdate = """
                     UPDATE notify SET title=?, message=?, "hour"=?, enable=?, notified=? WHERE id=?;
                 """;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlUpdate)) {
+
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlUpdate);
             preparedStatement.setString(1, notificationDao.getTitle());
             preparedStatement.setString(2, notificationDao.getMessage());
             preparedStatement.setString(3, notificationDao.getHour());
@@ -110,17 +124,35 @@ public class DAO {
 
             preparedStatement.executeUpdate();
 
-            clearDayWeeks(notificationDao.getId());
-            insertDayOfWeek(notificationDao.getDayWeek(), notificationDao.getId());
+            boolean resultClearDayWeeks = clearDayWeeks(notificationDao.getId());
 
-            return "Dados alterados com sucesso!";
+            if (!resultClearDayWeeks) {
+                connection.rollback();
+                return false;
+            }
+
+            boolean resultInsertDays = insertDayOfWeek(notificationDao.getDayWeek(), notificationDao.getId());
+            if (!resultInsertDays) {
+                connection.rollback();
+                return false;
+            }
+
+            connection.commit();
+            return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return "Error ao alterar dados: " + e.getMessage();
+            LogApp.logError("Erro ao tentar executar esta operação: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                LogApp.logError("Erro ao tentar executar esta operção: " + e.getMessage());
+            }
         }
     }
 
-    private void clearDayWeeks(Integer notificationId) throws SQLException {
+    private boolean clearDayWeeks(Integer notificationId) {
         String sqlCleanDaysWeek = """
                     DELETE FROM notifydayweek WHERE notifyid=?;
                 """;
@@ -128,6 +160,10 @@ public class DAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlCleanDaysWeek)) {
             preparedStatement.setInt(1, notificationId);
             preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            LogApp.logError("Erro ao tentar executar esta tarefa: " + e.getMessage());
+            return false;
         }
     }
 

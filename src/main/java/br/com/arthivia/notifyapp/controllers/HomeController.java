@@ -2,6 +2,7 @@ package br.com.arthivia.notifyapp.controllers;
 
 import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
+import br.com.arthivia.notifyapp.util.LogApp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -78,7 +79,7 @@ public class HomeController {
                 if (empty || enable == null) {
                     setGraphic(null);
                 } else {
-                    String path = (enable == 1) ? "/br/com/arthivia/notifyapp/images/ball-green.png" : "/br/com/arthivia/notifyapp/images/ball-red.png";
+                    String path = (enable == 1) ? "/br/com/arthivia/notifyapp/images/ball-green.png" : "/ball-red.png";
                     imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(path))));
                     imageView.setFitWidth(16);
                     imageView.setFitHeight(16);
@@ -180,7 +181,7 @@ public class HomeController {
 
             loadData();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            LogApp.logError("Erro ao tentar executar esta operação: " + e.getMessage());
         }
     }
 }
