@@ -48,9 +48,7 @@ public class InsertUpdateController {
     private Button btnClose;
 
     private DAO dao;
-
     private int notificationId = 0;
-
     private List<CheckBox> checkBoxes;
 
     @FXML
@@ -114,35 +112,37 @@ public class InsertUpdateController {
 
     private void saveNotification() {
         var result = validateField();
-        if (result) {
-            var dayWeeks = loadDayWeek();
-
-            var notificationDao = new NotificationDao(
-                    notificationId,
-                    txtTitle.getText(),
-                    textMessage.getText(),
-                    dayWeeks,
-                    txtHour.getText(),
-                    ckbEnable.isSelected() ? 1 : 0,
-                    0);
-
-            if (notificationId == 0) {
-                boolean insertResult = dao.insertNotification(notificationDao);
-                if(!insertResult){
-                    System.out.println("Inserido com sucesso!");
-                }else {
-                    System.out.println("Erro ao inserir, ver LOGS");
-                }
-            } else {
-                boolean updateResult = dao.updateNotification(notificationDao);
-                if (updateResult){
-                    System.out.println("Atualizado com sucesso!");
-                }else{
-                    System.out.println("Erro ao atualizar, ver LOGS");
-                }
-            }
-            close();
+        if (!result) {
+            return;
         }
+        var dayWeeks = loadDayWeek();
+
+        var notificationDao = new NotificationDao(
+                notificationId,
+                txtTitle.getText(),
+                textMessage.getText(),
+                dayWeeks,
+                txtHour.getText(),
+                ckbEnable.isSelected() ? 1 : 0,
+                0);
+
+        if (notificationId == 0) {
+            boolean insertResult = dao.insertNotification(notificationDao);
+            if (insertResult) {
+                System.out.println("Inserido com sucesso!");
+            } else {
+                System.out.println("Erro ao inserir, ver LOGS");
+            }
+        } else {
+            boolean updateResult = dao.updateNotification(notificationDao);
+            if (updateResult) {
+                System.out.println("Atualizado com sucesso!");
+            } else {
+                System.out.println("Erro ao atualizar, ver LOGS");
+            }
+        }
+        close();
+
     }
 
     private List<DayOfWeek> loadDayWeek() {
@@ -154,8 +154,8 @@ public class InsertUpdateController {
         notificationId = notificationDao.getId();
         txtHour.setText(notificationDao.getHour());
         ckbEnable.setSelected(notificationDao.getEnable() == 1);
-        ckbDom.setSelected(notificationDao.getDayWeek().contains(MONDAY));
-        ckbSeg.setSelected(notificationDao.getDayWeek().contains(SUNDAY));
+        ckbDom.setSelected(notificationDao.getDayWeek().contains(SUNDAY));
+        ckbSeg.setSelected(notificationDao.getDayWeek().contains(MONDAY));
         ckbTer.setSelected(notificationDao.getDayWeek().contains(TUESDAY));
         ckbQua.setSelected(notificationDao.getDayWeek().contains(WEDNESDAY));
         ckbQui.setSelected(notificationDao.getDayWeek().contains(THURSDAY));

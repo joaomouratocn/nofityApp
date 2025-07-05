@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox maxHeight="360.0" maxWidth="465.0" minHeight="360.0" minWidth="465.0" prefHeight="360.0" prefWidth="465.0" spacing="5.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.arthivia.notifyapp.controllers.InsertUpdateController">
+<VBox maxHeight="360.0" maxWidth="510.0" minHeight="360.0" minWidth="510.0" prefHeight="360.0" prefWidth="510.0" spacing="5.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.arthivia.notifyapp.controllers.InsertUpdateController">
     <padding>
         <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
     </padding>
@@ -24,13 +24,13 @@
     <VBox prefHeight="0.0" prefWidth="493.0">
         <Label prefHeight="18.0" prefWidth="127.0" text="Dias da semana:" />
         <HBox prefHeight="0.0" prefWidth="493.0" spacing="20.0">
-            <CheckBox fx:id="ckbDom" mnemonicParsing="false" text="Dom." />
             <CheckBox fx:id="ckbSeg" mnemonicParsing="false" text="Seg." />
             <CheckBox fx:id="ckbTer" mnemonicParsing="false" text="Ter." />
             <CheckBox fx:id="ckbQua" mnemonicParsing="false" text="Qua." />
             <CheckBox fx:id="ckbQui" mnemonicParsing="false" text="Qui." />
             <CheckBox fx:id="ckbSex" mnemonicParsing="false" text="Sex." />
             <CheckBox fx:id="ckbSab" mnemonicParsing="false" text="Sab." />
+            <CheckBox fx:id="ckbDom" mnemonicParsing="false" text="Dom." />
         </HBox>
         <Label fx:id="lbErrorDays" text="Selecione um dia" textFill="#f82e2e">
             <font>

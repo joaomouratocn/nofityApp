@@ -80,7 +80,7 @@ public class HomeController {
                 if (empty || enable == null) {
                     setGraphic(null);
                 } else {
-                    String path = (enable == 1) ? "/br/com/arthivia/notifyapp/images/ball-green.png" : "/ball-red.png";
+                    String path = (enable == 1) ? "/br/com/arthivia/notifyapp/images/ball-green.png" : "/br/com/arthivia/notifyapp/images/ball-red.png";
                     imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(path))));
                     imageView.setFitWidth(16);
                     imageView.setFitHeight(16);

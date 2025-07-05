@@ -19,7 +19,7 @@ public class Util {
     public static List<DayOfWeek> convertDayWeek(List<String> dayWeek) {
         var outputList = new ArrayList<DayOfWeek>();
         for (String day : dayWeek) {
-            outputList.add(switch (day) {
+            var value = switch (day) {
                 case "Seg." -> MONDAY;
                 case "Ter." -> TUESDAY;
                 case "Qua." -> WEDNESDAY;
@@ -28,7 +28,8 @@ public class Util {
                 case "Sab." -> SATURDAY;
                 case "Dom." -> SUNDAY;
                 default -> throw new IllegalStateException("Unexpected value: " + day);
-            });
+            };
+            outputList.add(value);
         }
         return outputList;
     }
