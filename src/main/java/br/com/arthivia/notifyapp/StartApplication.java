@@ -1,12 +1,14 @@
 package br.com.arthivia.notifyapp;
 
 import br.com.arthivia.notifyapp.util.Util;
+import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class StartApplication extends Application {
 
@@ -18,9 +20,23 @@ public class StartApplication extends Application {
         stage.setMinHeight(500);
         stage.setResizable(false);
         stage.setScene(scene);
+        configureTray(stage);
         stage.show();
 
         Util.startNotificationService();
+    }
+
+    private void configureTray(Stage stage) {
+        FXTrayIcon trayIcon = new FXTrayIcon(stage, Objects.requireNonNull(getClass().getResource("/br/com/arthivia/notifyapp/images/reminder.png")));
+        trayIcon.show();
+
+        trayIcon.addMenuItem("Restaurar", actionEvent -> stage.show());
+        trayIcon.addMenuItem("Sair", actionEvent -> System.exit(0));
+
+        stage.setOnCloseRequest(windowEvent -> {
+            windowEvent.consume();
+            stage.hide();
+        });
     }
 
     public static void main(String[] args) {
