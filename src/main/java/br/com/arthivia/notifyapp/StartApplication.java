@@ -1,5 +1,6 @@
 package br.com.arthivia.notifyapp;
 
+import br.com.arthivia.notifyapp.service.NotificationService;
 import br.com.arthivia.notifyapp.util.Util;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import javafx.application.Application;
@@ -20,10 +21,11 @@ public class StartApplication extends Application {
         stage.setMinHeight(500);
         stage.setResizable(false);
         stage.setScene(scene);
-        configureTray(stage);
+        //configureTray(stage);
         stage.show();
 
-        Util.startNotificationService();
+        NotificationService notificationService = new NotificationService();
+        notificationService.startNotificationService();
     }
 
     private void configureTray(Stage stage) {

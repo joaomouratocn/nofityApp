@@ -1,8 +1,18 @@
 package br.com.arthivia.notifyapp.util;
 
+import br.com.arthivia.notifyapp.StartApplication;
+import br.com.arthivia.notifyapp.controllers.InsertUpdateController;
 import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,31 +44,43 @@ public class Util {
         return outputList;
     }
 
-    public static void startNotificationService() {
-        var dao = DAO.getInstance();
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    public static void openInsertOrUpdateNotification(String typeAction, NotificationDao notificationDao) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Util.class.getResource("/br/com/arthivia/notifyapp/views/insert-update-view.fxml"));
+            Parent root = loader.load();
 
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                LocalDateTime now = LocalDateTime.now();
-                DayOfWeek today = now.getDayOfWeek();
-                String currentTime = now.format(DateTimeFormatter.ofPattern("HH:mm"));
-
-                List<NotificationDao> notifications = dao.getAllNotification();
-
-                for (NotificationDao notificationDao : notifications) {
-                    if (!notificationDao.getDayWeek().contains(today)) continue;
-                    if (!notificationDao.getHour().equals(currentTime)) continue;
-
-                    if (notificationDao.getNotified() == 0) {
-                        System.out.println(notificationDao.getTitle());
-                        dao.setNotified(notificationDao.getId());
-                    }
-                }
-
-            } catch (Exception e) {
-                LogApp.getInstance().logError("Erro ao tentar executar este operção: " + e.getMessage());
+            if (notificationDao != null) {
+                InsertUpdateController insertUpdateController = loader.getController();
+                insertUpdateController.loadNotification(notificationDao);
             }
-        }, 0, 1, TimeUnit.MINUTES);
+
+            Stage stage = new Stage();
+            stage.setTitle(typeAction);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            LogApp.getInstance().logError("Erro ao tentar executar esta operação: " + e.getMessage());
+        }
+    }
+
+    public static void openNotificationScreen(NotificationDao notificationDao) {
+        Platform.runLater(() -> {
+            try {
+                Stage notificationStage = new Stage();
+                notificationStage.initStyle(StageStyle.UNDECORATED);
+                FXMLLoader loader = new FXMLLoader(StartApplication.class.getResource("/br/com/arthivia/notifyapp/views/notification-view.fxml"));
+                Scene newScene = new Scene(loader.load());
+                notificationStage.setScene(newScene);
+                notificationStage.setResizable(false);
+                notificationStage.show();
+                notificationStage.toFront();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                LogApp.getInstance().logError(e.getMessage());
+            }
+        });
     }
 }

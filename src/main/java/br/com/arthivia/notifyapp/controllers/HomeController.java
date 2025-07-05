@@ -3,6 +3,7 @@ package br.com.arthivia.notifyapp.controllers;
 import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
 import br.com.arthivia.notifyapp.util.LogApp;
+import br.com.arthivia.notifyapp.util.Util;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static br.com.arthivia.notifyapp.util.Util.openInsertOrUpdateNotification;
 
 public class HomeController {
     @FXML
@@ -111,6 +114,7 @@ public class HomeController {
     private void configureBtnInsert() {
         btnInsert.setOnMouseClicked(mouseEvent -> {
             openInsertOrUpdateNotification("Cadastrar", null);
+            loadData();
         });
     }
 
@@ -121,6 +125,7 @@ public class HomeController {
                 return;
             }
             openInsertOrUpdateNotification("Alterar", notificationTable);
+            loadData();
         });
     }
 
@@ -159,30 +164,6 @@ public class HomeController {
             if (Objects.equals(msg, "Dado deletado com sucesso!")) {
                 tableView.getItems().remove(notificationDao);
             }
-        }
-    }
-
-
-    private void openInsertOrUpdateNotification(String typeAction, NotificationDao notificationDao) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/com/arthivia/notifyapp/views/insert-update-view.fxml"));
-            Parent root = loader.load();
-
-            if (notificationDao != null) {
-                InsertUpdateController insertUpdateController = loader.getController();
-                insertUpdateController.loadNotification(notificationDao);
-            }
-
-            Stage stage = new Stage();
-            stage.setTitle(typeAction);
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-            loadData();
-        } catch (IOException e) {
-            LogApp.getInstance().logError("Erro ao tentar executar esta operação: " + e.getMessage());
         }
     }
 }
