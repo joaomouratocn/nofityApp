@@ -30,7 +30,12 @@ public class StartApplication extends Application {
         FXTrayIcon trayIcon = new FXTrayIcon(stage, Objects.requireNonNull(getClass().getResource("/br/com/arthivia/notifyapp/images/reminder.png")));
         trayIcon.show();
 
-        trayIcon.addMenuItem("Restaurar", actionEvent -> stage.show());
+        trayIcon.addMenuItem("Restaurar", actionEvent -> {
+            stage.setIconified(false);
+            stage.show();
+            stage.toFront();
+
+        });
         trayIcon.addMenuItem("Sair", actionEvent -> System.exit(0));
 
         stage.setOnCloseRequest(windowEvent -> {
