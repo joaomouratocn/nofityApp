@@ -2,6 +2,7 @@ package br.com.arthivia.notifyapp.util;
 
 import br.com.arthivia.notifyapp.StartApplication;
 import br.com.arthivia.notifyapp.controllers.InsertUpdateController;
+import br.com.arthivia.notifyapp.controllers.NotificationController;
 import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
 import javafx.application.Platform;
@@ -72,7 +73,12 @@ public class Util {
                 Stage notificationStage = new Stage();
                 notificationStage.initStyle(StageStyle.UNDECORATED);
                 FXMLLoader loader = new FXMLLoader(StartApplication.class.getResource("/br/com/arthivia/notifyapp/views/notification-view.fxml"));
-                Scene newScene = new Scene(loader.load());
+                Parent root = loader.load();
+
+                NotificationController notificationController = loader.getController();
+                notificationController.setNotification(notificationDao);
+
+                Scene newScene = new Scene(root);
                 notificationStage.setScene(newScene);
                 notificationStage.setResizable(false);
                 notificationStage.show();

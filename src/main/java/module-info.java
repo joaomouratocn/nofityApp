@@ -5,6 +5,7 @@ module br.com.arthivia.notifyapp {
     requires jdk.jshell;
     requires java.desktop;
     requires com.dustinredmond.fxtrayicon;
+    requires javafx.media;
 
     opens br.com.arthivia.notifyapp to javafx.fxml;
     opens br.com.arthivia.notifyapp.model to javafx.base;
