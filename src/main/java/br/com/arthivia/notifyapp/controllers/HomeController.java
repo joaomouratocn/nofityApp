@@ -98,6 +98,7 @@ public class HomeController {
                 if (mouseEvent.getClickCount() == 2 && !row.isEmpty()) {
                     NotificationDao item = row.getItem();
                     openInsertOrUpdateNotification("Alterar", item);
+                    loadData();
                 }
             });
             return row;

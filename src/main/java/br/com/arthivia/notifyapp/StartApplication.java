@@ -21,7 +21,7 @@ public class StartApplication extends Application {
         stage.setMinHeight(500);
         stage.setResizable(false);
         stage.setScene(scene);
-        //configureTray(stage);
+        configureTray(stage);
         stage.show();
 
         NotificationService notificationService = new NotificationService();
