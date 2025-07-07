@@ -4,6 +4,7 @@ import br.com.arthivia.notifyapp.database.DAO;
 import br.com.arthivia.notifyapp.model.NotificationDao;
 import br.com.arthivia.notifyapp.util.LogApp;
 import br.com.arthivia.notifyapp.util.Util;
+import javafx.application.Platform;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -37,7 +38,9 @@ public class NotificationService {
 
                     if (notificationDao.getNotified() == 0) {
                         System.out.println("disparou notificação");
-                        Util.openNotificationScreen(notificationDao);
+                        Platform.runLater(() -> {
+                            Util.openNotificationScreen(notificationDao);
+                        });
                     }
                 }
 
@@ -45,6 +48,6 @@ public class NotificationService {
                 System.out.println(e.getMessage());
                 LogApp.getInstance().logError("Erro ao tentar executar este operção: " + e.getMessage());
             }
-        },0, 1, TimeUnit.MINUTES);
+        }, 0, 1, TimeUnit.MINUTES);
     }
 }

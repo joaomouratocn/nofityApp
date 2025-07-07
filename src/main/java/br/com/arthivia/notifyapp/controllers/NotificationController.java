@@ -25,9 +25,8 @@ public class NotificationController {
 
     @FXML
     private void initialize() {
-        AudioClip sound = new AudioClip(
-                Objects.requireNonNull(getClass().getResource("/br/com/arthivia/notifyapp/sound/new-notification.mp3")).toString()
-        );
+        String soundPath = Objects.requireNonNull(getClass().getResource("/br/com/arthivia/notifyapp/sound/new-notification.mp3")).toExternalForm();
+        AudioClip sound = new AudioClip(soundPath);
         sound.setVolume(0.7);
         sound.setCycleCount(AudioClip.INDEFINITE);
         sound.play();

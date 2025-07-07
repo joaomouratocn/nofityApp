@@ -68,25 +68,23 @@ public class Util {
     }
 
     public static void openNotificationScreen(NotificationDao notificationDao) {
-        Platform.runLater(() -> {
-            try {
-                Stage notificationStage = new Stage();
-                notificationStage.initStyle(StageStyle.UNDECORATED);
-                FXMLLoader loader = new FXMLLoader(StartApplication.class.getResource("/br/com/arthivia/notifyapp/views/notification-view.fxml"));
-                Parent root = loader.load();
+        try {
+            Stage notificationStage = new Stage();
+            notificationStage.initStyle(StageStyle.UNDECORATED);
+            FXMLLoader loader = new FXMLLoader(Util.class.getResource("/br/com/arthivia/notifyapp/views/notification-view.fxml"));
+            Parent root = loader.load();
 
-                NotificationController notificationController = loader.getController();
-                notificationController.setNotification(notificationDao);
+            NotificationController notificationController = loader.getController();
+            notificationController.setNotification(notificationDao);
 
-                Scene newScene = new Scene(root);
-                notificationStage.setScene(newScene);
-                notificationStage.setResizable(false);
-                notificationStage.show();
-                notificationStage.toFront();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                LogApp.getInstance().logError(e.getMessage());
-            }
-        });
+            Scene newScene = new Scene(root);
+            notificationStage.setScene(newScene);
+            notificationStage.setResizable(false);
+            notificationStage.show();
+            notificationStage.toFront();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            LogApp.getInstance().logError(e.getMessage());
+        }
     }
 }
