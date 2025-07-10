@@ -22,7 +22,7 @@ public class StartApplication extends Application {
         stage.setResizable(false);
         stage.setScene(scene);
         configureTray(stage);
-        stage.show();
+        //stage.show();
 
         NotificationService notificationService = new NotificationService();
         notificationService.startNotificationService();
