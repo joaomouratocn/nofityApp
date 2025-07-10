@@ -49,6 +49,7 @@ public class DAO {
                         }
                     }
                 } catch (SQLException e) {
+                    connection.rollback();
                     LogApp.getInstance().logError("Erro ao tentar executa");
                     System.out.println(e.getMessage());
                 }
@@ -61,11 +62,17 @@ public class DAO {
                     return false;
                 }
             }
-
+            connection.commit();
             return true;
         } catch (SQLException e) {
             LogApp.getInstance().logError("Erro ao tenta executar esta operação " + e.getMessage());
             return false;
+        }finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
